@@ -24,8 +24,7 @@ function log_data(ip, method, url, params, query) {
 
     if (ip_exist) {
     const requests = ip_exist[ip];
-    const existingRequest = requests.find(r =>
-        findMatchingRequest(r, method, url, params, query)
+    const existingRequest = requests.find(r => findMatchingRequest(r, method, url, params, query)
     );
     if (existingRequest) {
         existingRequest.Counter += 1;
