@@ -7,10 +7,10 @@ const dict = [];
 
 function findMatchingRequest(r, method, url, params, query) {
     return (
-    r.Method === method &&
-    r.Url === url &&
-    JSON.stringify(r.Parameter) === JSON.stringify(params) &&
-    JSON.stringify(r.Query) === JSON.stringify(query)
+        JSON.stringify(r.Method) === JSON.stringify([method]) &&
+        JSON.stringify(r.Url) === JSON.stringify([url]) &&
+        JSON.stringify(r.Parameter) === JSON.stringify([params]) &&
+        JSON.stringify(r.Query) === JSON.stringify([query])
     );
 }
 
@@ -20,20 +20,23 @@ function log_data(ip, method, url, params, query) {
     it will eventually make the code slow. I tried looking for better solutions like avoid duplication. 
     this is the best i can do unless someone can help me out. This wouldnt affect the client side */
     const ip_exist = dict.find(entry => Object.keys(entry)[0] === ip); 
-    const request = { Method: method, Url: url, Parameter: params, Query: query, Counter: 1 };
 
+    const request = { Method: [method], Url: [url], Parameter: [params], Query: [query], Counter: 1 };
     if (ip_exist) {
-    const requests = ip_exist[ip];
-    const existingRequest = requests.find(r => findMatchingRequest(r, method, url, params, query)
-    );
-    if (existingRequest) {
-        existingRequest.Counter += 1;
+        const requests = ip_exist[ip];
+        const existingRequest = requests.find(r => findMatchingRequest(r, method, url, params, query));
+        if (existingRequest) {
+            existingRequest.Counter += 1;
+
+            existingRequest.Method.push(method)
+            existingRequest.Parameter.push(params)
+            existingRequest.Query.push(query)
+        }
+
     } else {
-        requests.push(request);
+        dict.push({ [ip]: [request] });
     }
-    } else {
-    dict.push({ [ip]: [request] });
-    }
+    console.log(dict)
     // for now i will add to a file.
     const filePath = path.join(__dirname, 'log_data.json');
     fs.writeFile(filePath, JSON.stringify(dict, null, 2), (err) => {

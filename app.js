@@ -4,9 +4,7 @@ const app = express()
 const args = process.argv.slice(2);
 const [host, port] = [args[0], args[1]];
 
-
-const Partial_Security = express();
-Partial_Security.use(partial_middleware);
+app.use(partial_middleware)
 
 
 app.get("/", (req, res) => {
@@ -17,6 +15,3 @@ app.listen(port, host, () => {
     console.log(`LISTENING ON -> http://${host}:${port}`);
 });
 
-Partial_Security.listen(8392, () => {
-    console.log('Dashboard server running on http://localhost:8392');
-  });
