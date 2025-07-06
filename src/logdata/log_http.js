@@ -14,11 +14,10 @@ function log_data(ip, method, url, params, query, xss_detect) {
     this is the best i can do unless someone can help me out. This wouldnt affect the client side */
     const ip_exist = dict.find(entry => Object.keys(entry)[0] === ip); 
 
-    const request = { Method: [method], Url: [url], Parameter: [params], Query: [query], ContainsXSS: [xss_detect], Counter: 1 };
+    const request = { Method: [method], Url: [url], Parameter: [params], Query: [query], ContainsXSS: [xss_detect]};
     if (ip_exist) {
         const requests = ip_exist[ip][0];
-        request.ContainsXSS.push(xss_detect)
-        requests.Counter += 1;
+        requests.ContainsXSS.push(xss_detect)
         requests.Url.push(url)
         requests.Method.push(method)
         requests.Parameter.push(params)
