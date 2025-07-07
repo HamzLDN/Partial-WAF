@@ -13,7 +13,7 @@ app.set('view engine', 'html');
 
 const { Server } = require('socket.io');
 const server = http.createServer(app);
-
+app.use(express.urlencoded({ extended: true }));
 const io = new Server(server); 
 var dict = [];
 let id = 0
@@ -41,12 +41,11 @@ app.get("/", (req, res) => {
 
 app.post("/whitelist-ip", (req, res) => {
   const {filtered_ip} = req.body;
-  
-  if (whitelisted_ip.some(x=>filtered_ip===x)) {
+  if (whitelisted_ip.some(x=>filtered_ip[0]===x)) {
     return res.status(200).send("IP ALREADY WHITELISTED")
   }
   else {
-    whitelisted_ip.push(filtered_ip)
+    whitelisted_ip.push(filtered_ip[0])
     return res.status(200).send("IP HAS BEEN WHITELISTED")
   }
 })

@@ -33,20 +33,23 @@ function renderFilteredTable() {
           bgcolour='red'
         }
         if (match) {
+          const parsed = JSON.parse(req.Header[i]);
+          const data = JSON.stringify(parsed, null, 4);
           const row = `
-            <tr role="row" class='odd' style='background-color: ${bgcolour}'>
-              <td>${ip}</td>
-              <td>${req.Method[i]}</td>
-              <td>${req.Url[i]}</td>
-              <td>
-                <div id="overlay" >
-                  <button class='btn-off' onclick="off()">Click to view content</button>
-                  <div id="text">${JSON.stringify(req.Header[i])}</div>
-                </div>
-              </td>
-              <td>${req.ContainsXSS[i]}</td>
-            </tr>
-          `;
+          <tr role="row" class='odd' style='background-color: ${bgcolour}'>
+            <td>${ip}</td>
+            <td>${req.Method[i]}</td>
+            <td>${req.Url[i]}</td>
+            <td>
+              <div style="padding:20px">
+              
+                <button onclick='overlay_on(${JSON.stringify(data)})'>Click to view</button>
+              </div>
+            </td>
+            <td>${req.ContainsXSS[i]}</td>
+            <td>${status_code}</td>
+          </tr>
+        `;
           tbody.insertAdjacentHTML('afterbegin', row);
         }
       }
@@ -58,6 +61,16 @@ socket.on('network', (data) => {
   console.log('Received data:', data);
   renderTable(data);
 });
+
+function overlay_off() {
+  document.getElementById("overlay").style.display = "none";
+}
+
+function overlay_on(headerData) {
+  document.getElementById("text").textContent = headerData;
+  document.getElementById("overlay").style.display = "block";
+}
+
 function renderTable(data) {
   allData = data
   renderFilteredTable();
