@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
     <link rel="stylesheet" href="assets/css/Ludens---1-Dark-mode-Index-Table-with-Search-Filters.css">
     <link rel="stylesheet" href="assets/css/Ludens---1-Index-Table-with-Search--Sort-Filters-v20.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body style="background: rgb(203,203,203);">
@@ -58,8 +59,6 @@
                                     <th class="text-center">IP ADDRESS<input type="text" id="filter-input" placeholder="Filter by name..." /></th>
                                     <th class="text-center">METHOD</th>
                                     <th class="text-center">ENDPOINT</th>
-                                    <th class="text-center">QUERY</th>
-                                    <th class="text-center">PARAMERTER</th>
                                     <th class="text-center">BODY</th>
                                     <th class="text-center">DETECTION</th>
                                     <th class="text-center filter-false sorter-false">Setting</th>
@@ -73,6 +72,11 @@
             </div>
         </div>
     </div>
+    <div id="overlay" style="display:none;">
+        <button class='btn-off' onclick="off()">X</button>
+        <pre id="text"></pre>
+      </div>
+      
     <script>
             const input = document.getElementById('filter-input');
             const table = document.getElementById('ipi-table');
