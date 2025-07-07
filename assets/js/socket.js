@@ -18,8 +18,7 @@ function renderFilteredTable() {
           ip.toLowerCase().includes(query) ||
           req.Method[i].toLowerCase().includes(query) ||
           req.Url[i].toLowerCase().includes(query) ||
-          JSON.stringify(req.Query[i]).toLowerCase().includes(query) ||
-          JSON.stringify(req.Parameter[i]).toLowerCase().includes(query);
+          JSON.stringify(req.Header[i]).toLowerCase().includes(query);
 
         const str =  req.Url[i]
         const slashMatches = [...str.matchAll(/\//g)];
@@ -39,9 +38,12 @@ function renderFilteredTable() {
               <td>${ip}</td>
               <td>${req.Method[i]}</td>
               <td>${req.Url[i]}</td>
-              <td>${JSON.stringify(req.Query[i])}</td>
-              <td>${JSON.stringify(req.Parameter[i])}</td>
-              <td>${JSON.stringify(req.Parameter[i])}</td>
+              <td>
+                <div id="overlay" >
+                  <button class='btn-off' onclick="off()">Click to view content</button>
+                  <div id="text">${JSON.stringify(req.Header[i])}</div>
+                </div>
+              </td>
               <td>${req.ContainsXSS[i]}</td>
             </tr>
           `;

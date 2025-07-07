@@ -17,27 +17,45 @@ const server = http.createServer(app);
 const io = new Server(server); 
 var dict = [];
 let id = 0
+var whitelisted_ip = []
 function Partial_MiddleWare(req, res, next) {
-    const has_xss = XssDetect.containsXSS([req.method, req.originalUrl, req.params, req.query]);
-    console.log("BODY IS", req.body)
-    http_log.log_data(req.ip, req.method, req.originalUrl, req.params, req.query, has_xss, dict, id)[0];
+    const has_xss = XssDetect.containsXSS([req.method, req.originalUrl, JSON.stringify(req.headers)]);
+    const new_headers = { ...req.headers };
+
+    if (new_headers && 'cookie' in new_headers) {
+        delete new_headers.cookie;
+        console.log('Deleted cookies')
+      }
+    http_log.log_data(req.ip, req.method, req.originalUrl, JSON.stringify(new_headers), has_xss, dict, id)[0];
     io.emit('network', dict);
-    dict = dict
     id+=1;
     next();
 }
 
 app.get("/", (req, res) => {
+    if (req.some(x => x==req.ip)) {
+
+    }
     res.sendFile(path.join(__dirname, '../../views', 'index.html'));
 })
 
+app.post("/whitelist-ip", (req, res) => {
+  const {filtered_ip} = req.body;
+  
+  if (whitelisted_ip.some(x=>filtered_ip===x)) {
+    return res.status(200).send("IP ALREADY WHITELISTED")
+  }
+  else {
+    whitelisted_ip.push(filtered_ip)
+    return res.status(200).send("IP HAS BEEN WHITELISTED")
+  }
+})
 io.on('connection', (socket) => {
     console.log('Client connected:', socket.id);
-
     socket.emit('network', dict);
-
 });
-server.listen(8392, () => {
-    console.log('Dashboard server running on http://localhost:8392');
+
+server.listen(278, () => {
+    console.log('Dashboard server running on http://localhost:278');
   });
 module.exports = Partial_MiddleWare;
