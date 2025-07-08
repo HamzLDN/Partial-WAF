@@ -24,5 +24,8 @@
   "main": "src/middleware/http_traffic.js",
   "scripts": {
     "test": "echo \"no tests yet\""
+  },
+  "dependencies": {
+    "socket.io": "^4.8.1"
   }
 }
