@@ -47,7 +47,6 @@ function renderFilteredTable() {
               </div>
             </td>
             <td>${req.ContainsXSS[i]}</td>
-            <td>${status_code}</td>
           </tr>
         `;
           tbody.insertAdjacentHTML('afterbegin', row);
