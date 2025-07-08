@@ -3,7 +3,7 @@
 
 Partial Protect aims to heavily focus on detecting threats in real time and defending against it. Aimed to be user friendly for small sites trying to have extra security for free.
 
-<img src="ReadmeImages/Dashboard.png" width="200" />
+<img src="ReadmeImages/Dashboard.png" width="800" />
 
 Front-end was designed using bootstrap studio
 ## How it works
