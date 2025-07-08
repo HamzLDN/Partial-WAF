@@ -1,0 +1,28 @@
+{
+  "name": "partial-protect",
+  "version": "1.0.0",
+  "description": "Partial-Protect express view http traffic on website",
+  "keywords": [
+    "nodejs",
+    "express",
+    "middleware",
+    "http",
+    "security",
+    "analysis"
+  ],
+  "homepage": "https://github.com/HamzLDN/Partial-Protect#readme",
+  "bugs": {
+    "url": "https://github.com/HamzLDN/Partial-Protect/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HamzLDN/Partial-Protect.git"
+  },
+  "license": "ISC",
+  "author": "HamzLDN",
+  "type": "commonjs",
+  "main": "src/middleware/http_traffic.js",
+  "scripts": {
+    "test": "echo \"no tests yet\""
+  }
+}
