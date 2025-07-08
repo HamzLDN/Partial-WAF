@@ -13,7 +13,7 @@ You will have a dashboard which runs on the localhost. And you can access it on 
 
 ## Features
 
-- Search/Filter by Keyword
+- Search by Keyword
 - WhiteList IPS to dashboard
 - BlackList IPS to Main Website
 - Cross compatible 
@@ -21,13 +21,13 @@ You will have a dashboard which runs on the localhost. And you can access it on 
 
 ## Installation
 
-In your project path type
+In your project path, type
 
 ```bash
   npm install github:HamzLDN/Partial-Protect
 ```
 
-Now, your express project, add the 2 following lines to deploy
+Now, on your express project, add the 2 following lines to deploy
 ```js
   const partial_middleware = require('partial-protect')
   app.use(partial_middleware)
