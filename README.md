@@ -36,6 +36,6 @@ Now, on your express project, add the 2 following lines to deploy
 Default port should be `278` to acccess on localhost
 ## Acknowledgements
 
- - [Bootstrap Studios for front-end](bootstrapstudio.io)
+ - [Bootstrap Studios for front-end](https://bootstrapstudio.io)
  - [Readme template I've used](https://readme.so/editor)
 
