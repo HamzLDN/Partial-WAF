@@ -8,9 +8,9 @@ function render_csrf(html) {
     console.log(new_csrf_data)
 
     if (new_csrf_data === -1) {
-        return html
+        return [html, -1]
     } else {
-        return html.slice(0, new_csrf_data) + csrf_data + html.slice(new_csrf_data);
+        return [html.slice(0, new_csrf_data) + csrf_data + html.slice(new_csrf_data), token]
     }
 }
 

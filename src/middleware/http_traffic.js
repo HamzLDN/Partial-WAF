@@ -19,30 +19,53 @@ const io = new Server(server);
 var dict = [];
 var information = {
   'blacklist-ip': [],
-  'whitelist-ip': []
+  'whitelist-ip': [],
+  'csrf': []
 }
 
+function handle_csrf_layer(req, res) {
+  const originalSend = res.send;
+  res.send = function (body) {
+    console.log("CSRF")
+    if (typeof body === 'string' && body.includes('<html')) {
+      const params = csrf.render_csrf(body)
+      body = params[0]
 
+      if (params[1] !== -1) {
+        information['csrf'].push({IP : req.ip, CSRF_TOKEN: params[1]['token'], EXPR: params[1]['expiration']})
+      }
+      console.log(information)
+    }
+    return originalSend.call(this, body);
+  };
+}
 
 function Partial_MiddleWare(req, res, next) {
-    const originalSend = res.send;
-    res.send = function (body) {
-      if (typeof body === 'string' && body.includes('<html')) {
-        body = csrf.render_csrf(body)
+    if (req.method === "POST") console.log(req.method, req.body)
+    
+    if (req.method === "POST") {
+      try {
+        console.log("FOUND CSRF TOKEN -> ")
+        const is_valid = information['csrf'].some(x=>x['IP'] === req.ip && x['CSRF_TOKEN']===req.body['csrf'] && x['EXPR'] > Date.now())
+        if (!is_valid) {
+          console.log("CSRF_ID INCORRECT")
+          return res.status(401).send("CSRF_ID IS INCORRECT")
+        }
+      } catch (err){
+        console.log(err)
       }
-      return originalSend.call(this, body);
-    };
+    }
+    
+    handle_csrf_layer(req, res)
     const has_xss = XssDetect.containsXSS([req.method, req.originalUrl, JSON.stringify(req.headers)]);
     const new_headers = { ...req.headers };
-    console.log(req.headers)
-    console.log(information['blacklist-ip'])
     if (information['blacklist-ip'].some(x => x===req.ip)) {
       return res.status(401).send("Unauthorized Access. Your IP is probably blocked")
     }
     if (new_headers && 'cookie' in new_headers) {
         delete new_headers.cookie;
         console.log('Deleted cookies')
-      }
+    }
     http_log.log_data(req.ip, req.method, req.originalUrl, JSON.stringify(new_headers), has_xss, dict)[0];
     io.emit('network', dict);
     next();
