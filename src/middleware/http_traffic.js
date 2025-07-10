@@ -1,4 +1,5 @@
 const http_log = require('../logdata/log_http')
+const csrf = require("../security/csrf_protection")
 const XssDetect = require('./xssdetect')
 const http = require('http');
 const express = require('express')
@@ -24,8 +25,16 @@ var information = {
 
 
 function Partial_MiddleWare(req, res, next) {
+    const originalSend = res.send;
+    res.send = function (body) {
+      if (typeof body === 'string' && body.includes('<html')) {
+        body = csrf.render_csrf(body)
+      }
+      return originalSend.call(this, body);
+    };
     const has_xss = XssDetect.containsXSS([req.method, req.originalUrl, JSON.stringify(req.headers)]);
     const new_headers = { ...req.headers };
+    console.log(req.headers)
     console.log(information['blacklist-ip'])
     if (information['blacklist-ip'].some(x => x===req.ip)) {
       return res.status(401).send("Unauthorized Access. Your IP is probably blocked")

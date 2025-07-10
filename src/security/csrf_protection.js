@@ -1,12 +1,46 @@
-function render_csrf(html_content) {
-    const csrf_session  = csrf_gen(30)
-    
-    const index = html_content.indexOf("<head>")
-    const before_head = html_content.slice(0, index);
-    const after_head = html_content.slice(index);
-    
-    return `${before_head}csrf-token="+${csrf_session['token']}"${after_head}`// i put the token in between the head
+function render_csrf(html) {
+    const token = csrf_gen(100)
+
+    const csrf_data = `\n<input type="hidden" name="csrf" value="${token['token']}" />`;
+
+    const new_csrf_data = insert_csrf(html);
+    console.log("++++++++++++++++")
+    console.log(new_csrf_data)
+
+    if (new_csrf_data === -1) {
+        return html
+    } else {
+        return html.slice(0, new_csrf_data) + csrf_data + html.slice(new_csrf_data);
+    }
 }
+
+function insert_csrf(html) {
+    const form_start = html.indexOf("<form");
+    if (form_start === -1) return -1;
+    let in_string = false;
+    let quoteChar = null;
+
+    for (let i = form_start; i < html.length; i++) {
+        const char = html[i];
+
+        if ((char === '"' || char === "'" || char === '`')) {
+            if (!in_string) {
+                in_string = true;
+                quoteChar = char;
+            } else if (char === quoteChar) {
+                in_string = false;
+                quoteChar = null;
+            }
+        }
+
+        if (char === '>' && !in_string) {
+            return i + 1;
+        }
+    }
+
+    return -1;
+}
+
 
 
 function generate_time(minute) {
@@ -24,4 +58,7 @@ function csrf_gen(token_length) {
       token += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return {"token": token, "expiration": generate_time(30)}
+}
+module.exports = {
+    render_csrf
 }
