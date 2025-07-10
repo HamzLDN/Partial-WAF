@@ -41,18 +41,16 @@ function handle_csrf_layer(req, res) {
 }
 
 function Partial_MiddleWare(req, res, next) {
-    if (req.method === "POST") console.log(req.method, req.body)
-    
     if (req.method === "POST") {
       try {
         console.log("FOUND CSRF TOKEN -> ")
-        const is_valid = information['csrf'].some(x=>x['IP'] === req.ip && x['CSRF_TOKEN']===req.body['csrf'] && x['EXPR'] > Date.now())
+        const is_valid = information['csrf'].some(x=>x['IP'] === req.ip && x['CSRF_TOKEN']===req.body['csrf'] && csrf.check_expiration(x['EXPR']))
         if (!is_valid) {
           console.log("CSRF_ID INCORRECT")
           return res.status(401).send("CSRF_ID IS INCORRECT")
         }
       } catch (err){
-        console.log(err)
+        return res.status(401).send("INTERNAL SERVER ERROR")
       }
     }
     

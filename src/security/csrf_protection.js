@@ -32,12 +32,10 @@ function insert_csrf(html) {
                 quoteChar = null;
             }
         }
-
         if (char === '>' && !in_string) {
             return i + 1;
         }
     }
-
     return -1;
 }
 
@@ -60,5 +58,5 @@ function csrf_gen(token_length) {
     return {"token": token, "expiration": generate_time(30)}
 }
 module.exports = {
-    render_csrf
+    render_csrf, check_expiration
 }
