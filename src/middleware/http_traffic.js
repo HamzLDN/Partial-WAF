@@ -3,7 +3,6 @@ const csrf = require("../security/csrf_protection")
 const XssDetect = require('./xssdetect')
 const http = require('http');
 const express = require('express')
-const fetch = require('node-fetch');
 const path = require('path');
 const app = express()
 console.log( path.join(__dirname, '../assets'))
@@ -31,24 +30,20 @@ function handle_csrf_layer(req, res) {
       const params = csrf.render_csrf(body)
       body = params[0]
 
-      if (params[1] !== -1) {
-        information['csrf'].push({IP : req.ip, CSRF_TOKEN: params[1]['token'], EXPR: params[1]['expiration']})
-      }
+      if (params[1] !== -1) information['csrf'].push({IP : req.ip, CSRF_TOKEN: params[1]['token'], EXPR: params[1]['expiration']})
       console.log(information)
     }
     return originalSend.call(this, body);
   };
 }
 
+
 function Partial_MiddleWare(req, res, next) {
     if (req.method === "POST") {
       try {
         console.log("FOUND CSRF TOKEN -> ")
         const is_valid = information['csrf'].some(x=>x['IP'] === req.ip && x['CSRF_TOKEN']===req.body['csrf'] && csrf.check_expiration(x['EXPR']))
-        if (!is_valid) {
-          console.log("CSRF_ID INCORRECT")
-          return res.status(401).send("CSRF_ID IS INCORRECT")
-        }
+        if (!is_valid) return res.status(401).send("CSRF_ID IS INCORRECT")
       } catch (err){
         return res.status(401).send("INTERNAL SERVER ERROR")
       }
@@ -82,6 +77,11 @@ app.post("/whitelist-ip", (req, res) => {
     information[index].push(filtered_ip) 
     return res.status(200).send("IP WHITELISTED SUCCESSFULLY")
   }
+})
+
+app.post("/purge_tokens", (req, res) => {
+  information['csrf'] = csrf.purge_csrf_tokens(information)
+
 })
 
 app.post("/blacklist-ip", (req, res) => {

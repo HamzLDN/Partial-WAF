@@ -39,7 +39,9 @@ function insert_csrf(html) {
     return -1;
 }
 
-
+function purge_csrf_tokens(info) {
+    return info['csrf'].filter(value=>!check_expiration(value['EXPR']))
+}
 
 function generate_time(minute) {
     return Date.now() + minute * 60 * 1000
@@ -58,5 +60,5 @@ function csrf_gen(token_length) {
     return {"token": token, "expiration": generate_time(30)}
 }
 module.exports = {
-    render_csrf, check_expiration
+    render_csrf, check_expiration, purge_csrf_tokens
 }
