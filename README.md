@@ -11,12 +11,14 @@ Front-end was designed using bootstrap studio
 You will have a dashboard which runs on the localhost. And you can access it on port 278. You will be able to view IP, Request methods, Parameters, Query, and XSS detection. 
 
 
-## Features
+## 🛡️ Security Features
 
-- Search by Keyword
-- WhiteList IPS to dashboard
-- BlackList IPS to Main Website
-- Cross compatible 
+| Feature                  | Description                                                                 |
+|--------------------------|-----------------------------------------------------------------------------|
+| **IP Whitelisting**      | Restricts access to the dashboard to only approved (trusted) IP addresses |
+| **IP Blacklisting**      | Blocks specific IP addresses from accessing the main entire website|
+| **CSRF Protection**      | Protects against Cross-Site Request Forgery using secure tokens|
+| **Rate Limiting**        | Limits the number of requests per minute to prevent web scrapers or any sort of brute forcing attacks|
 
 
 ## Installation
