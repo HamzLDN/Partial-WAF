@@ -19,7 +19,7 @@ You will have a dashboard which runs on the localhost. And you can access it on 
 | **IP Blacklisting**      | Blocks specific IP addresses from accessing the main entire website|
 | **CSRF Protection**      | Protects against Cross-Site Request Forgery using secure tokens|
 | **Rate Limiting**        | Limits the number of requests per minute to prevent web scrapers or any sort of brute forcing attacks|
-
+| **XSS DETECTION**        | Detects cross site scripting requests and alerts on the dashboard with a red table exposing the attacker|
 
 ## Installation
 

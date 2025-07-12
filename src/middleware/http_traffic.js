@@ -23,13 +23,14 @@ var information = {
   'whitelist-ip': [],
   'csrf': [],
   'rate_limit': 60,
-  'timeout': 5
+  'timeout': 5,
+  
 }
 
 function Partial_MiddleWare(req, res, next) {
     if (ratelimit.exceeded_rpm(req.ip, information['rate_limit'], information['timeout'])) return res.status(403).send("IP IS TEMPORARILY BLOCKED")
     if (req.method === "GET")  csrf.handle_csrf_layer(req, res, information)
-    if (req.originalUrl === "/login") {
+    if (req.method === "POST") {
       const valid_csrf = csrf.validate_csrf(req, res, information)
       if (valid_csrf === 401) return res.status(401).send("UNAUTHROIZED CSRF")
       else if (valid_csrf === 500) return res.status(500).send("INTERNAL SERVER ERROR")

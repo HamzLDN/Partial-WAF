@@ -40,6 +40,7 @@
                 </a>
                 <div id="settings" class="settings-menu">
                     <form method="post" action="/settings" id="optionsForm">
+                      <h3>Server Configuration</h3>
                       <label style="font-size: 14px; color: white;">
                         <input type="checkbox" name="block_incoming" value="1">
                         BLOCK INCOMING REQUESTS
@@ -53,6 +54,20 @@
                       <label style="font-size: 14px; color: white;">
                         <input type="checkbox" name="shutdown" value="1">
                         SHUTDOWN THE WEBSITE
+                      </label>
+                    </br>
+                    
+                    </br>
+                    <h3>Rate Limiting</h3>
+                      <label style="font-size: 14px; color: white;">
+                        REQUESTS PER MIN
+                        <input type="number" name="rate-limit" placeholder="Rate limit">
+                      </label>
+                    </br>
+                    </br>
+                      <label style="font-size: 14px; color: white;">
+                        REQUEST TIMEOUT
+                        <input type="number" name="timeout" placeholder="Timeout">
                       </label>
                       <button type="submit" class="submit-btn">Submit</button>
                     </form>
