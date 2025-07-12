@@ -24,14 +24,17 @@ var information = {
 }
 
 function Partial_MiddleWare(req, res, next) {
-  console.log(req.originalUrl)
+    console.log(res.send.length)
     if (req.method === "GET") {
       csrf.handle_csrf_layer(req, res, information)
-    } else if (req.method === "POST") {
-      csrf.validate_csrf(req, res, information)
+    
+    } 
+    if (req.originalUrl === "/login") {
+      if (csrf.validate_csrf(req, res, information) === 401) return res.status(401).send("UNAUTHROIZED CSRF")
+      else if (csrf.validate_csrf(req, res, information) === 500) return res.status(500).send("INTERNAL SERVER ERROR")
     }
     
-    const has_xss = XssDetect.containsXSS([req.method, req.originalUrl, JSON.stringify(req.headers)]);
+    const has_xss = XssDetect.containsXSS([req.method, JSON.stringify(req.originalUrl), JSON.stringify(req.headers)]);
     const new_headers = { ...req.headers };
     if (information['blacklist-ip'].some(x => x===req.ip)) {
       return res.status(401).send("Unauthorized Access. Your IP is probably blocked")
@@ -40,7 +43,6 @@ function Partial_MiddleWare(req, res, next) {
         delete new_headers.cookie;
         console.log('Deleted cookies')
     }
-    console.log("HERE")
     http_log.log_data(req.ip, req.method, req.originalUrl, JSON.stringify(new_headers), has_xss, dict)[0];
     io.emit('network', dict);
     next();

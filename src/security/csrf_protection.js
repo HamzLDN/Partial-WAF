@@ -7,9 +7,8 @@ function render_csrf(html) {
     }
     let new_csrf_data = html;
     let offset = 0;
-
+    const token = csrf_gen(100)
     for (let x = 0; x < find_forms.length; x++) { // adds csrf for multiple form
-        const token = csrf_gen(100)
         const csrf_data = `\n<input type="hidden" name="csrf" value="${token['token']}" />`;
         let insert_index = insert_csrf(html, find_forms[x]);
         if (insert_index === -1) continue;
@@ -89,11 +88,11 @@ function validate_csrf(req, res, information) {
         const is_valid = information['csrf'].some(x=>x['IP'] === req.ip && x['CSRF_TOKEN'] === req.body['csrf'] && check_expiration(x['EXPR']))
         if (!is_valid) {
         console.log("CSRF_ID INCORRECT")
-        return res.status(401).send("CSRF_ID IS INCORRECT")
+        return 401
         }
     } catch (err){
         console.log(err)
-        return res.status(50).send("INTERNAL SERVER ERROR")
+        return 500
     }
 }
 

@@ -17,8 +17,19 @@
     font-size: 20px;
     color: white;
   }
-  .btn-off {
-      background-color: white;
-      width: 30px;
-      height: 30px;
-  }
+.btn-off {
+    background-color: white;
+    width: 30px;
+    height: 30px;
+}
+
+.settings-menu {
+    display: none;
+    line-height: 1.8;
+    padding: 30px;
+}
+.submit-btn {
+    position: relative;
+    right: 180px;
+    top: 250px;
+}

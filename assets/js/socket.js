@@ -28,7 +28,8 @@ function renderFilteredTable() {
           (slashCount === 2 && str.endsWith('/'))) {
           bgcolour='green'
         }
-        if (req.ContainsXSS[i]==='true'){
+        console.log(req.ContainsXSS[i])
+        if (req.ContainsXSS[i]){
           bgcolour='red'
         }
         if (match) {
@@ -46,6 +47,7 @@ function renderFilteredTable() {
               </div>
             </td>
             <td>${req.ContainsXSS[i]}</td>
+            <td class="text-center align-middle" style="max-height: 60px;height: 60px;"><a class="btn btnMaterial btn-flat primary semicircle" role="button" href="#"><i class="far fa-eye"></i></a><a class="btn btnMaterial btn-flat success semicircle" role="button" href="#"><i class="fas fa-pen"></i></a><a class="btn btnMaterial btn-flat accent btnNoBorders checkboxHover" role="button" style="margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#delete-modal" href="#"><i class="fas fa-trash btnNoBorders" style="color: #DC3545;"></i></a></td>
           </tr>
         `;
           tbody.insertAdjacentHTML('afterbegin', row);
@@ -62,11 +64,23 @@ socket.on('network', (data) => {
 
 function overlay_off() {
   document.getElementById("overlay").style.display = "none";
+  document.getElementById("text").textContent = "";  // ⬅ Clear the text
 }
 
 function overlay_on(headerData) {
   document.getElementById("text").textContent = headerData;
   document.getElementById("overlay").style.display = "block";
+  document.getElementById("settings").style.display = 'none'
+}
+
+function settings() {
+  const setting_option = document.getElementById("settings");
+  const overlay = document.getElementById("overlay");
+
+  overlay.appendChild(setting_option);
+
+  setting_option.style.display = "block"
+  overlay.style.display = "block";
 }
 
 function renderTable(data) {
