@@ -47,7 +47,13 @@ function Partial_MiddleWare(req, res, next) {
       req.ip,
       req.method, 
       req.originalUrl, 
-      JSON.stringify(new_headers), XssDetect.containsXSS([req.method, JSON.stringify(req.originalUrl), JSON.stringify(req.headers)]), 
+      JSON.stringify(new_headers), 
+      XssDetect.containsXSS(
+        [req.method, 
+          JSON.stringify(req.originalUrl), 
+          JSON.stringify(req.headers)
+
+        ]), 
       dict)[0];
     io.emit('network', dict);
     next();
