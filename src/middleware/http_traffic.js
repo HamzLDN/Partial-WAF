@@ -1,11 +1,12 @@
 const http_log = require('../logdata/log_http')
 const csrf = require("../security/csrf_protection")
+const ratelimit = require("../security/ratelimiter")
 const XssDetect = require('./xssdetect')
 const http = require('http');
 const express = require('express')
 const path = require('path');
 const app = express()
-console.log( path.join(__dirname, '../assets'))
+
 app.use('/assets', express.static(path.join(__dirname, '../../assets')));
 app.use(express.static(path.join(__dirname, 'views')));
 app.engine('html', require('ejs').renderFile);
@@ -23,14 +24,15 @@ var information = {
 }
 
 function Partial_MiddleWare(req, res, next) {
-    console.log(res.send.length)
+    if (ratelimit.exceeded_rpm(req.ip, 5, 1)) return res.status(403).send("IP IS TEMPORARILY BLOCKED")
     if (req.method === "GET") {
       csrf.handle_csrf_layer(req, res, information)
     
     } 
     if (req.originalUrl === "/login") {
-      if (csrf.validate_csrf(req, res, information) === 401) return res.status(401).send("UNAUTHROIZED CSRF")
-      else if (csrf.validate_csrf(req, res, information) === 500) return res.status(500).send("INTERNAL SERVER ERROR")
+      const valid_csrf = csrf.validate_csrf(req, res, information)
+      if (valid_csrf === 401) return res.status(401).send("UNAUTHROIZED CSRF")
+      else if (valid_csrf === 500) return res.status(500).send("INTERNAL SERVER ERROR")
     }
     
     const has_xss = XssDetect.containsXSS([req.method, JSON.stringify(req.originalUrl), JSON.stringify(req.headers)]);

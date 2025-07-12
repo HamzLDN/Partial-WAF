@@ -1,13 +1,13 @@
+const utility = require("../utils/TokenUtils")
+
 function render_csrf(html) {
-
-
     const find_forms = find_multiple_index(html, "<form");
     if (find_forms.length === 0) {
         return [html, -1]
     }
     let new_csrf_data = html;
     let offset = 0;
-    const token = csrf_gen(100)
+    const token = {"token": utility.generate_token(100), "expiration": utility.generate_time(30)}
     for (let x = 0; x < find_forms.length; x++) { // adds csrf for multiple form
         const csrf_data = `\n<input type="hidden" name="csrf" value="${token['token']}" />`;
         let insert_index = insert_csrf(html, find_forms[x]);
@@ -50,7 +50,6 @@ function insert_csrf(html, form_start) {
 function handle_csrf_layer(req, res, information) {
     const originalSend = res.send;
     res.send = function (body) {
-      console.log("CSRF")
       if (typeof body === 'string' && body.includes('<html')) {
         const params = render_csrf(body)
         body = params[0]
@@ -58,7 +57,6 @@ function handle_csrf_layer(req, res, information) {
         if (params[1] !== -1) {
           information['csrf'].push({IP : req.ip, CSRF_TOKEN: params[1]['token'], EXPR: params[1]['expiration']})
         }
-        console.log(information)
       }
       return originalSend.call(this, body);
     };
@@ -85,7 +83,7 @@ function find_multiple_index(html, string) {
 
 function validate_csrf(req, res, information) {
     try {
-        const is_valid = information['csrf'].some(x=>x['IP'] === req.ip && x['CSRF_TOKEN'] === req.body['csrf'] && check_expiration(x['EXPR']))
+        const is_valid = information['csrf'].some(x=>x['IP'] === req.ip && x['CSRF_TOKEN'] === req.body['csrf'] && utility.check_expiration(x['EXPR']))
         if (!is_valid) {
         console.log("CSRF_ID INCORRECT")
         return 401
@@ -96,29 +94,12 @@ function validate_csrf(req, res, information) {
     }
 }
 
-function generate_time(minute) {
-    return Date.now() + minute * 60 * 1000
-}
 
-function check_expiration(timestamp) {
-    return Date.now() < timestamp
-}
 
 function purge_csrf() {
-    // will work on this later
-}
-
-function csrf_gen(token_length) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789=-+/';
-    let token = '';
-    for (let i = 0; i < token_length; i++) {
-      token += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return {"token": token, "expiration": generate_time(30)}
 }
 module.exports = {
     render_csrf, 
-    check_expiration, 
     handle_csrf_layer,
     validate_csrf
 }
