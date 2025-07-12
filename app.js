@@ -8,7 +8,7 @@ app.use(partial_middleware)
 
 
 app.get("/", (req, res) => {
-    res.send("Hello");
+    res.send("THIS IS AN EXAMPLE");
 });
 
 app.listen(port, host, () => {
