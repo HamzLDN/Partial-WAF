@@ -20,15 +20,14 @@ var dict = [];
 var information = {
   'blacklist-ip': [],
   'whitelist-ip': [],
-  'csrf': []
+  'csrf': [],
+  'rate_limit': 60,
+  'timeout': 5
 }
 
 function Partial_MiddleWare(req, res, next) {
-    if (ratelimit.exceeded_rpm(req.ip, 5, 1)) return res.status(403).send("IP IS TEMPORARILY BLOCKED")
-    if (req.method === "GET") {
-      csrf.handle_csrf_layer(req, res, information)
-    
-    } 
+    if (ratelimit.exceeded_rpm(req.ip, information['rate_limit'], information['timeout'])) return res.status(403).send("IP IS TEMPORARILY BLOCKED")
+    if (req.method === "GET")  csrf.handle_csrf_layer(req, res, information)
     if (req.originalUrl === "/login") {
       const valid_csrf = csrf.validate_csrf(req, res, information)
       if (valid_csrf === 401) return res.status(401).send("UNAUTHROIZED CSRF")
@@ -44,7 +43,12 @@ function Partial_MiddleWare(req, res, next) {
         delete new_headers.cookie;
         console.log('Deleted cookies')
     }
-    http_log.log_data(req.ip, req.method, req.originalUrl, JSON.stringify(new_headers), has_xss, dict)[0];
+    http_log.log_data(
+      req.ip,
+      req.method, 
+      req.originalUrl, 
+      JSON.stringify(new_headers), XssDetect.containsXSS([req.method, JSON.stringify(req.originalUrl), JSON.stringify(req.headers)]), 
+      dict)[0];
     io.emit('network', dict);
     next();
 }
