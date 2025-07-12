@@ -10,10 +10,9 @@ app.use('/assets', express.static(path.join(__dirname, '../../assets')));
 app.use(express.static(path.join(__dirname, 'views')));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
-
 const { Server } = require('socket.io');
-const { info } = require('console');
 const server = http.createServer(app);
+
 app.use(express.urlencoded({ extended: true }));
 const io = new Server(server); 
 var dict = [];

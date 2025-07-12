@@ -3,6 +3,17 @@ const current_ips = [];
 const socket = io();
 document.getElementById('filter-input').addEventListener('input', renderFilteredTable);
 
+function escapeHTML(str) {
+  if (!str) return '';
+  return str.replace(/[&<>"']/g, s => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[s]);
+}
+
 function renderFilteredTable() {
   const query = document.getElementById('filter-input').value.toLowerCase();
   const tbody = document.getElementById('log-table-body');
@@ -36,21 +47,25 @@ function renderFilteredTable() {
           const parsed = JSON.parse(req.Header[i]);
           const data = JSON.stringify(parsed, null, 4);
           const row = `
-          <tr role="row" class='odd' style='background-color: ${bgcolour}'>
-            <td>${ip}</td>
-            <td>${req.Method[i]}</td>
-            <td>${req.Url[i]}</td>
+          <tr role="row" class="odd" style="background-color: ${escapeHTML(bgcolour)}">
+            <td>${escapeHTML(ip)}</td>
+            <td>${escapeHTML(req.Method[i])}</td>
+            <td>${escapeHTML(req.Url[i])}</td>
             <td>
               <div style="padding:20px">
-              
-                <button onclick='overlay_on(${JSON.stringify(data)})'>Click to view</button>
+                <button id="btn-${i}">Click to view</button>
               </div>
             </td>
-            <td>${req.ContainsXSS[i]}</td>
-            <td class="text-center align-middle" style="max-height: 60px;height: 60px;"><a class="btn btnMaterial btn-flat primary semicircle" role="button" href="#"><i class="far fa-eye"></i></a><a class="btn btnMaterial btn-flat success semicircle" role="button" href="#"><i class="fas fa-pen"></i></a><a class="btn btnMaterial btn-flat accent btnNoBorders checkboxHover" role="button" style="margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#delete-modal" href="#"><i class="fas fa-trash btnNoBorders" style="color: #DC3545;"></i></a></td>
+            <td>${escapeHTML(req.ContainsXSS[i])}</td>
+            <td class="text-center align-middle" style="max-height: 60px;height: 60px;">
+              <a class="btn btnMaterial btn-flat primary semicircle" role="button" href="#"><i class="far fa-eye"></i></a>
+              <a class="btn btnMaterial btn-flat success semicircle" role="button" href="#"><i class="fas fa-pen"></i></a>
+              <a class="btn btnMaterial btn-flat accent btnNoBorders checkboxHover" role="button" style="margin-left: 5px; color: #DC3545;" data-bs-toggle="modal" data-bs-target="#delete-modal" href="#"><i class="fas fa-trash btnNoBorders"></i></a>
+            </td>
           </tr>
         `;
-          tbody.insertAdjacentHTML('afterbegin', row);
+        tbody.insertAdjacentHTML('afterbegin', row);
+        document.getElementById(`btn-${i}`).addEventListener('click', () => overlay_on(data));
         }
       }
       current_ips.push(ip);

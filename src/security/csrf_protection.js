@@ -105,7 +105,7 @@ function check_expiration(timestamp) {
 }
 
 function purge_csrf() {
-
+    // will work on this later
 }
 
 function csrf_gen(token_length) {
