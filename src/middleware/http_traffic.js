@@ -11,6 +11,7 @@ app.use('/assets', express.static(path.join(__dirname, '../../assets')));
 app.use(express.static(path.join(__dirname, 'views')));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
+
 const { Server } = require('socket.io');
 const server = http.createServer(app);
 
@@ -33,16 +34,14 @@ function Partial_MiddleWare(req, res, next) {
       if (valid_csrf === 401) return res.status(401).send("UNAUTHROIZED CSRF")
       else if (valid_csrf === 500) return res.status(500).send("INTERNAL SERVER ERROR")
     }
-    
-    const has_xss = XssDetect.containsXSS([req.method, JSON.stringify(req.originalUrl), JSON.stringify(req.headers)]);
+
     const new_headers = { ...req.headers };
-    if (information['blacklist-ip'].some(x => x===req.ip)) {
-      return res.status(401).send("Unauthorized Access. Your IP is probably blocked")
-    }
+    if (information['blacklist-ip'].some(x => x===req.ip))  return res.status(401).send("Unauthorized Access. Your IP is probably blocked")
     if (new_headers && 'cookie' in new_headers) {
         delete new_headers.cookie;
         console.log('Deleted cookies')
     }
+
     http_log.log_data(
       req.ip,
       req.method, 
