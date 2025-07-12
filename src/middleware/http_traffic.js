@@ -49,10 +49,9 @@ function Partial_MiddleWare(req, res, next) {
       req.originalUrl, 
       JSON.stringify(new_headers), 
       XssDetect.containsXSS(
-        [req.method, 
+        [
           JSON.stringify(req.originalUrl), 
           JSON.stringify(req.headers)
-
         ]), 
       dict)[0];
     io.emit('network', dict);
