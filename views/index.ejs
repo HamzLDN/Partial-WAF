@@ -36,38 +36,34 @@
             </div>
             <div class="col-12 col-sm-6 col-md-6 text-end" style="margin-bottom: 30px;">
                 <a class="btn btn-primary" role="button" onclick=settings()>
-                    <i class="fa fa-plus" ></i>&nbsp;ADD RULE
+                    <i class="fa fa-plus" ></i>&nbsp;SETTINGS
                 </a>
                 <div id="settings" class="settings-menu">
                     <form method="post" action="/settings" id="optionsForm">
                       <h3>Server Configuration</h3>
-                      <label style="font-size: 14px; color: white;">
-                        <input type="checkbox" name="block_incoming" value="1">
-                        BLOCK INCOMING REQUESTS
-                      </label><br>
-                  
-                      <label style="font-size: 14px; color: white;">
-                        <input type="checkbox" name="block_outgoing" value="1">
-                        BLOCK OUTGOING REQUESTS
-                      </label><br>
-                  
-                      <label style="font-size: 14px; color: white;">
-                        <input type="checkbox" name="shutdown" value="1">
-                        SHUTDOWN THE WEBSITE
-                      </label>
+                    <label style="font-size: 14px; color: white;">
+                        FREEZE MAIN WEBSITE
+                        <input type="hidden" name="freeze_site" value="0">
+                        <input type="checkbox" name="freeze_site" value="1" <%= locals.freeze_site == 1 ? 'checked' : '' %> />
+                    </label>
+                    <br>
+                    <label style="font-size: 14px; color: white;">
+                        CSRF PROTECTION
+                        <input type="hidden" name="csrf_protection" value="0">
+                        <input type="checkbox" name="csrf_protection" value="1" <%= locals.csrf_protection == 1 ? 'checked' : '' %> />
+                    </label>
                     </br>
-                    
                     </br>
                     <h3>Rate Limiting</h3>
                       <label style="font-size: 14px; color: white;">
-                        REQUESTS PER MIN
-                        <input type="number" name="rate-limit" placeholder="Rate limit">
+                        RPM (REQUESTS PER MINUTE)
+                        <input type="number" name="rate-limit" placeholder="Rate limit" value="<%= locals['rate-limit'] %>">
                       </label>
                     </br>
                     </br>
                       <label style="font-size: 14px; color: white;">
-                        REQUEST TIMEOUT
-                        <input type="number" name="timeout" placeholder="Timeout">
+                        REQUEST TIMEOUT (MINUTE)
+                        <input type="number" name="timeout" placeholder="Timeout" value="<%= locals['timeout'] %>">
                       </label>
                       <button type="submit" class="submit-btn">Submit</button>
                     </form>

@@ -29,6 +29,7 @@ function handle_ips(ip, ip_exist, rate_limit, timeout) {
 
 
 function exceeded_rpm(ip, rate_limit, timeout) { // false means didnt exceed limit
+    if ((rate_limit && timeout)===undefined) return false
     const ip_exist = blocked_ips.find(entry => Object.keys(entry)[0] === ip);
     if (!ip_exist) {
         const request = { };
@@ -39,6 +40,11 @@ function exceeded_rpm(ip, rate_limit, timeout) { // false means didnt exceed lim
     } else {
         check_blocked_ip(ip_exist[ip])
         return handle_ips(ip, ip_exist, rate_limit, timeout)
+    }
+    try {
+        console.log(ip_exist[ip])
+    } catch {
+
     }
     return false
 }
