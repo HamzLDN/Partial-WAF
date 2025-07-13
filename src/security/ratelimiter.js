@@ -41,11 +41,6 @@ function exceeded_rpm(ip, rate_limit, timeout) { // false means didnt exceed lim
         check_blocked_ip(ip_exist[ip])
         return handle_ips(ip, ip_exist, rate_limit, timeout)
     }
-    try {
-        console.log(ip_exist[ip])
-    } catch {
-
-    }
     return false
 }
 
