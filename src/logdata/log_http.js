@@ -26,13 +26,9 @@ function log_data(ip, method, url, header, xss_detect, dictionary_values) {
         requests.Url.push(url)
         requests.Method.push(method)
         requests.Header.push(header)
-        // requests.Counter = requests.Counter+1
-        // dict[ip].Counter = dict[ip][0].Counter+1
     }
     else {
         const request = { Method: [method], Url: [url], Header: [header], ContainsXSS: [xss_detect]};
-        // request['Timestamp'] = utility.generate_time(1)
-        // request['Counter'] = 0
         dict.push({ [ip]: [request]});
     }
     

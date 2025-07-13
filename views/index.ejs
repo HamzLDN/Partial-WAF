@@ -19,20 +19,20 @@
         <div class="container-fluid"><a class="navbar-brand" href="#" style="color: rgba(0,0,0,0.9);">Partial Protect</a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link active" href="#">First Item</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Second Item</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Third Item</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="https://github.com/HamzLDN/Partial-Protect">GITHUB</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://tiktok.com/@h1_dev">TIKTOK</a></li>
+                    <li class="nav-item"><a class="nav-link" href="http://parti.al">My Website</a></li>
                 </ul>
             </div>
         </div>
     </nav>
     <header style="padding: 40px;">
-        <h1>HTTP/HTTPS TRAFFIC</h1>
+        <h1>PARTIAL DASHBOARD</h1>
     </header>
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 col-sm-6 col-md-6">
-                <h3 class="text-dark mb-4">Observing: example.com</h3>
+                <h3 class="text-dark mb-4">Observing main site</h3>
             </div>
             <div class="col-12 col-sm-6 col-md-6 text-end" style="margin-bottom: 30px;">
                 <a class="btn btn-primary" role="button" onclick=settings()>
@@ -53,17 +53,22 @@
                         <input type="checkbox" name="csrf_protection" value="1" <%= locals.csrf_protection == 1 ? 'checked' : '' %> />
                     </label>
                     </br>
+                    <label style="font-size: 14px; color: white;">
+                        BLOCK XSS
+                        <input type="hidden" name="block_xss" value="0">
+                        <input type="checkbox" name="block_xss" value="1" <%= locals.block_xss == 1 ? 'checked' : '' %> />
+                    </label>
+                    </br>
                     </br>
                     <h3>Rate Limiting</h3>
                       <label style="font-size: 14px; color: white;">
                         RPM (REQUESTS PER MINUTE)
-                        <input type="number" name="rate-limit" placeholder="Rate limit" value="<%= locals['rate-limit'] %>">
+                        <input type="number" name="rate-limit" style="width: 90px;" placeholder="Rate limit" value="<%= locals['rate-limit'] %>">
                       </label>
-                    </br>
                     </br>
                       <label style="font-size: 14px; color: white;">
                         REQUEST TIMEOUT (MINUTE)
-                        <input type="number" name="timeout" placeholder="Timeout" value="<%= locals['timeout'] %>">
+                        <input type="number" name="timeout" style="width: 80px;" placeholder="Timeout" value="<%= locals['timeout'] %>">
                       </label>
                       <button type="submit" class="submit-btn">Submit</button>
                     </form>
@@ -101,7 +106,7 @@
                                     <th class="text-center">METHOD</th>
                                     <th class="text-center">ENDPOINT</th>
                                     <th class="text-center">BODY</th>
-                                    <th class="text-center">DETECTION</th>
+                                    <th class="text-center">XSS DETECTION</th>
                                     <th class="text-center filter-false sorter-false">Setting</th>
                                 </tr>
                             </thead>
