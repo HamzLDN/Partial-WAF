@@ -22,9 +22,7 @@ var information = {
   'blacklist-ip': [],
   'whitelist-ip': ['127.0.0.1', '::1'],
   'csrf': [],
-  'settings' : {
-    'csrf_protection': 1
-  }
+  'settings' : {}
 }
 
 function csrf_layer(req, res) {
