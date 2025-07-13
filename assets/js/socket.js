@@ -25,10 +25,10 @@ function renderFilteredTable() {
 
     requests.forEach(req => {
       for (let i = 0; i < req.Method.length; i++) {
-        const match = ip.toLowerCase().includes(query) //||
-          // req.Method[i].toLowerCase().includes(query) ||
-          // req.Url[i].toLowerCase().includes(query) ||
-          // JSON.stringify(req.Header[i]).toLowerCase().includes(query);
+        const match = ip.toLowerCase().includes(query) ||
+          req.Method[i].toLowerCase().includes(query) ||
+          req.Url[i].toLowerCase().includes(query) ||
+          JSON.stringify(req.Header[i]).toLowerCase().includes(query);
 
         const str =  req.Url[i]
         const slashMatches = [...str.matchAll(/\//g)];
