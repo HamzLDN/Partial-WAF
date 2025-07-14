@@ -1,5 +1,4 @@
-const xss = require('xss');
-
+import xss from "xss"
 function containsXSS(info) {
     return info.some(value => {
         if (typeof value !== 'string') return false;
@@ -8,6 +7,6 @@ function containsXSS(info) {
     });
 }
 
-module.exports = {
+export default {
     containsXSS
 }

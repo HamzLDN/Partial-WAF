@@ -1,5 +1,4 @@
-const utility = require("../utils/TokenUtils")
-
+import utility from "../utils/TokenUtils.js"
 let blocked_ips = []
 
 function check_blocked_ip(ip_data) {
@@ -44,6 +43,6 @@ function exceeded_rpm(ip, rate_limit, timeout) { // false means didnt exceed lim
     return false
 }
 
-module.exports = {
+export default {
     exceeded_rpm
 }

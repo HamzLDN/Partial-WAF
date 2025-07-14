@@ -1,5 +1,4 @@
-const utility = require("../utils/TokenUtils")
-
+import utility from "../utils/TokenUtils.js";
 function render_csrf(html) {
     const find_forms = find_multiple_index(html, "<form");
     if (find_forms.length === 0) {
@@ -98,7 +97,7 @@ function validate_csrf(req, res, information) {
 
 function purge_csrf() {
 }
-module.exports = {
+export default {
     render_csrf, 
     handle_csrf_layer,
     validate_csrf
