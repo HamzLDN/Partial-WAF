@@ -14,12 +14,13 @@ router.post("/whitelist-ip", (req, res) => {
   })
   
 router.post("/blacklist-ip", (req, res) => {
+  
     const {filtered_ip} = req.body;
     if (req.information['blacklist-ip'].some(x=>filtered_ip===x)) {
         return res.status(200).send("IP ALREADY BLACKLISTED")
     }
     else {
-        req.information['blacklist-ip'].push(filtered_ip) 
+        information['blacklist-ip'].push(filtered_ip) 
         return res.status(200).send("IP BLACKLISTED SUCCESSFULLY")
     }
   }

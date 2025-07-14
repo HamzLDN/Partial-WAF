@@ -7,6 +7,7 @@ const permissions = require('../routes/permissions')
 const express = require('express')
 const path = require('path');
 const app = express()
+const information = require('../logdata/information')
 
 app.use('/assets', express.static(path.join(__dirname, '../../assets')));
 app.set('view engine', 'ejs');
