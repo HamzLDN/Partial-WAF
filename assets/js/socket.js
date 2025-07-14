@@ -84,14 +84,16 @@ function overlay_off() {
 
 function overlay_on(headerData) {
   document.getElementById("text").textContent = headerData;
-  document.getElementById("overlay").style.display = "block";
-  document.getElementById("settings").style.display = 'none'
+  const overlay = document.getElementById("overlay");
+  overlay.style.display = "block";
+  overlay.style.width = "70%";
+  document.getElementById("settings").style.display = 'none';
 }
 
 function settings() {
   const setting_option = document.getElementById("settings");
   const overlay = document.getElementById("overlay");
-
+  overlay.style.width = "30%";
   overlay.appendChild(setting_option);
 
   setting_option.style.display = "block"

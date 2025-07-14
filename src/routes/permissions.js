@@ -1,5 +1,6 @@
 const express = require('express')
-
+const settings = require('../logdata/information')
+const information = settings.info
 const router = express.Router()
 
 router.post("/whitelist-ip", (req, res) => {
@@ -16,7 +17,7 @@ router.post("/whitelist-ip", (req, res) => {
 router.post("/blacklist-ip", (req, res) => {
   
     const {filtered_ip} = req.body;
-    if (req.information['blacklist-ip'].some(x=>filtered_ip===x)) {
+    if (information['blacklist-ip'].some(x=>filtered_ip===x)) {
         return res.status(200).send("IP ALREADY BLACKLISTED")
     }
     else {

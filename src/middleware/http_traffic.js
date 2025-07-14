@@ -7,7 +7,7 @@ const permissions = require('../routes/permissions')
 const express = require('express')
 const path = require('path');
 const app = express()
-const information = require('../logdata/information')
+const settings = require('../logdata/information')
 
 app.use('/assets', express.static(path.join(__dirname, '../../assets')));
 app.set('view engine', 'ejs');
@@ -15,20 +15,14 @@ app.set('views', path.join(__dirname, '../../views'));
 
 app.use(express.json());
 const { Server } = require('socket.io');
+
 const server = http.createServer(app);
 
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/permissions", permissions)
 const io = new Server(server); 
-var dict = [];
-var information = {
-  'dict': [],
-  'blacklist-ip': [],
-  'whitelist-ip': ['127.0.0.1', '::1'],
-  'csrf': [],
-  'settings' : []
-}
+const information = settings.info
 
 function csrf_layer(req, res) {
   if (req.method === "GET")  csrf.handle_csrf_layer(req, res, information)
@@ -39,11 +33,15 @@ function csrf_layer(req, res) {
     }
 }
 function Partial_MiddleWare(req, res, next) {
+
     if (information.settings['csrf_protection'] === 1) csrf_layer(req, res)
     if (information.settings['freeze_site'] === 1) {
       return res.status(503).send("SERVER IS TEMPORARILY DOWN")
     }
-    if (ratelimit.exceeded_rpm(req.ip, parseInt(information.settings['rate-limit']), parseInt(information.settings['timeout']))) {
+    if (ratelimit.exceeded_rpm(
+      req.ip,
+      parseInt(information.settings['rate-limit']),
+      parseInt(information.settings['timeout']))) {
       return res.status(403).send("IP IS TEMPORARILY BLOCKED")
     }
     const xss = XssDetect.containsXSS([JSON.stringify(req.originalUrl), JSON.stringify(req.headers)])
@@ -59,17 +57,15 @@ function Partial_MiddleWare(req, res, next) {
       req.method, 
       req.originalUrl, 
       JSON.stringify(new_headers),
-      xss,
-      dict)[0];
-    io.emit('network', dict);
+      xss)[0];
+    io.emit('network', information.dict);
 
     
-    if (information.setting['block_xss'] === 1 && xss) return res.status(403).send("XSS IS FORBIDDEN! WE HAVE FLAGGED IP ADDRESS")
+    if (information.settings['block_xss'] === 1 && xss) return res.status(403).send("XSS IS FORBIDDEN! WE HAVE FLAGGED IP ADDRESS")
     next();
 }
 
 app.get("/", (req, res) => {
-  console.log(req.ip)
   if (information['whitelist-ip'].some(x=>req.ip===x)) {
     res.render('index', information['settings']);
   } 
@@ -90,8 +86,9 @@ app.post("/settings", (req, res) => {
 })
 
 io.on('connection', (socket) => {
+  console.log(information.dict)
     console.log('Client connected:', socket.id);
-    socket.emit('network', dict);
+    socket.emit('network', information.dict);
 });
 
 server.listen(278, () => {
