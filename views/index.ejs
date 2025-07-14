@@ -39,38 +39,46 @@
                     <i class="fa fa-plus" ></i>&nbsp;SETTINGS
                 </a>
                 <div id="settings" class="settings-menu">
+                    
                     <form method="post" action="/settings" id="optionsForm">
                       <h3>Server Configuration</h3>
                     <label style="font-size: 14px; color: white;">
-                        FREEZE MAIN WEBSITE
+                        
                         <input type="hidden" name="freeze_site" value="0">
                         <input type="checkbox" name="freeze_site" value="1" <%= locals.freeze_site == 1 ? 'checked' : '' %> />
+                        FREEZE MAIN WEBSITE
                     </label>
                     <br>
+                    <br>
+                    <h3>WEB SECURITY</h3>
+
                     <label style="font-size: 14px; color: white;">
-                        CSRF PROTECTION
+                        
                         <input type="hidden" name="csrf_protection" value="0">
                         <input type="checkbox" name="csrf_protection" value="1" <%= locals.csrf_protection == 1 ? 'checked' : '' %> />
+                        CSRF PROTECTION
                     </label>
                     </br>
                     <label style="font-size: 14px; color: white;">
-                        BLOCK XSS
+                        
                         <input type="hidden" name="block_xss" value="0">
                         <input type="checkbox" name="block_xss" value="1" <%= locals.block_xss == 1 ? 'checked' : '' %> />
+                    BLOCK XSS
                     </label>
                     </br>
                     </br>
                     <h3>Rate Limiting</h3>
                       <label style="font-size: 14px; color: white;">
+                        
+                        <input type="number" name="rate-limit" style="width: 50px;" value="<%= locals['rate-limit'] %>">
                         RPM (REQUESTS PER MINUTE)
-                        <input type="number" name="rate-limit" style="width: 90px;" placeholder="Rate limit" value="<%= locals['rate-limit'] %>">
                       </label>
                     </br>
                       <label style="font-size: 14px; color: white;">
+                        <input type="number" name="timeout" style="width: 50px;" value="<%= locals['timeout'] %>">
                         REQUEST TIMEOUT (MINUTE)
-                        <input type="number" name="timeout" style="width: 80px;" placeholder="Timeout" value="<%= locals['timeout'] %>">
                       </label>
-                      <button type="submit" class="submit-btn">Submit</button>
+                      <button type="submit" class="submit-btn btn btn-primary">Submit</button>
                     </form>
                   </div>                  
             </div>
