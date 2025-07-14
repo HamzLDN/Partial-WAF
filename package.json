@@ -20,7 +20,7 @@
   },
   "license": "ISC",
   "author": "HamzLDN",
-  "type": "module",
+  "type": "commonjs",
   "main": "src/middleware/http_traffic.js",
   "scripts": {
     "test": "echo \"no tests yet\""

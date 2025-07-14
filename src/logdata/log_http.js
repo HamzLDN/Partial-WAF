@@ -1,6 +1,7 @@
 /* we are logging every requests and storing it. 
 I will make it send as an api once i get the web dashboard working */
-
+const utility = require("../utils/TokenUtils")
+let count = 0;
 // function refresh_logs(dict, size, count) {
 //     /// 300 > 20
 //     if (count > dict.length) {
@@ -34,6 +35,6 @@ function log_data(ip, method, url, header, xss_detect, dictionary_values) {
     return dict;
 }
     
-export default {
+module.exports = {
     log_data
 }

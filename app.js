@@ -1,4 +1,4 @@
-import express from "express";
+const express = require('express')
 const partial_middleware = require('partial-protect')
 const app = express()
 const args = process.argv.slice(2);

@@ -1,11 +1,10 @@
-import http_log from '../logdata/log_http.js';
-
-import csrf from "../security/csrf_protection.js";
-import ratelimit from "../security/ratelimiter.js"
-import XssDetect from "./xssdetect.js";
-import http from "http";
-import express from "express";
-import path from "path";
+const http_log = require('../logdata/log_http')
+const csrf = require("../security/csrf_protection")
+const ratelimit = require("../security/ratelimiter")
+const XssDetect = require('./xssdetect')
+const http = require('http');
+const express = require('express')
+const path = require('path');
 const app = express()
 
 app.use('/assets', express.static(path.join(__dirname, '../../assets')));
@@ -114,5 +113,4 @@ io.on('connection', (socket) => {
 server.listen(278, () => {
   console.log('Dashboard server running on http://localhost:278');
 });
-
-export default Partial_MiddleWare;
+module.exports = Partial_MiddleWare;

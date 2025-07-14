@@ -13,9 +13,9 @@ function generate_time(minute) {
 
 function check_expiration(timestamp) {
     return Date.now() < timestamp
-
+    
 }
-export default {
+module.exports = {
     generate_token,
     generate_time,
     check_expiration
