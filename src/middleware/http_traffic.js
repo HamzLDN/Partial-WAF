@@ -8,33 +8,27 @@ const express = require('express')
 const path = require('path');
 const app = express()
 const settings = require('../logdata/information')
+const csv = require('fast-csv');
 
 app.use('/assets', express.static(path.join(__dirname, '../../assets')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../../views'));
-
 app.use(express.json());
-const { Server } = require('socket.io');
 
+
+const { Server } = require('socket.io');
 const server = http.createServer(app);
 
 app.use(express.urlencoded({ extended: true }));
-
 app.use("/permissions", permissions)
+
 const io = new Server(server); 
 const information = settings.info
 
-function csrf_layer(req, res) {
-  if (req.method === "GET")  csrf.handle_csrf_layer(req, res, information)
-    if (req.method === "POST") {
-      const valid_csrf = csrf.validate_csrf(req, res, information)
-      if (valid_csrf === 401) return res.status(401).send("UNAUTHROIZED CSRF")
-      else if (valid_csrf === 500) return res.status(500).send("INTERNAL SERVER ERROR")
-    }
-}
+
 function Partial_MiddleWare(req, res, next) {
 
-    if (information.settings['csrf_protection'] === 1) csrf_layer(req, res)
+    if (information.settings['csrf_protection'] === 1) csrf.csrf_layer(req, res)
     if (information.settings['freeze_site'] === 1) {
       return res.status(503).send("SERVER IS TEMPORARILY DOWN")
     }
@@ -71,7 +65,11 @@ app.get("/", (req, res) => {
   } 
 })
 
-
+app.get('/download-logs', (req, res) => {
+  res.setHeader('Content-Disposition', 'attachment; filename="report.json"');
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify(information.dict, null, 2)); 
+});
 
 app.post("/settings", (req, res) => {
   for (const [key, value] of Object.entries(req.body)) {
@@ -80,13 +78,11 @@ app.post("/settings", (req, res) => {
     } else {
       information['settings'][key] = value
     }
-    
   }
   return res.redirect("/")
 })
 
 io.on('connection', (socket) => {
-  console.log(information.dict)
     console.log('Client connected:', socket.id);
     socket.emit('network', information.dict);
 });
