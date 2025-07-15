@@ -1,5 +1,5 @@
-
 const utility = require("../utils/TokenUtils")
+
 function render_csrf(html) {
     const find_forms = find_multiple_index(html, "<form");
     if (find_forms.length === 0) {
@@ -84,6 +84,7 @@ function find_multiple_index(html, string) {
 function validate_csrf(req, res, information) {
     try {
         const is_valid = information['csrf'].some(x=>x['IP'] === req.ip && x['CSRF_TOKEN'] === req.body['csrf'] && utility.check_expiration(x['EXPR']))
+        
         if (!is_valid) {
         console.log("CSRF_ID INCORRECT")
         return 401
@@ -94,18 +95,12 @@ function validate_csrf(req, res, information) {
     }
 }
 
-function csrf_layer(req, res) {
-    if (req.method === "GET")  csrf.handle_csrf_layer(req, res, information)
-      if (req.method === "POST") {
-        const valid_csrf = csrf.validate_csrf(req, res, information)
-        if (valid_csrf === 401) return res.status(401).send("UNAUTHROIZED CSRF")
-        else if (valid_csrf === 500) return res.status(500).send("INTERNAL SERVER ERROR")
-      }
-  }
 
+
+function purge_csrf() {
+}
 module.exports = {
     render_csrf, 
     handle_csrf_layer,
-    csrf_layer,
     validate_csrf
 }

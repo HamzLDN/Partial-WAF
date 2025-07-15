@@ -26,7 +26,6 @@
     "test": "echo \"no tests yet\""
   },
   "dependencies": {
-    "fast-csv": "^5.0.2",
     "socket.io": "^4.8.1"
   }
 }
