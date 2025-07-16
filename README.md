@@ -1,7 +1,7 @@
 
-# Partial-Protect
+# Partial-WAF
 
-Partial Protect aims to heavily focus on detecting threats in real time and defending against it. Aimed to be user friendly for small sites trying to have extra security for free.
+Partial-WAF aims to heavily focus on detecting threats in real time and defending against it. Aimed to be user friendly for small sites trying to have extra security for free.
 
 ## Visuals
 <img src="ReadmeImages/Dashboard.png" width="800" />
@@ -31,12 +31,12 @@ You will have a dashboard which runs on the localhost. And you can access it on 
 In your project path, type
 
 ```bash
-  npm install github:HamzLDN/Partial-Protect
+  npm install github:HamzLDN/Partial-WAF
 ```
 
 Now, on your express project, add the 2 following lines to deploy
 ```js
-  const partial_middleware = require('partial-protect')
+  const partial_middleware = require('Partial-WAF')
   app.use(partial_middleware)
 ```
 
