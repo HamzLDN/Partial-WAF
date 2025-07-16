@@ -8,7 +8,7 @@ Partial-WAF aims to heavily focus on detecting threats in real time and defendin
 
 ## Settings option
 To view the image just click on the settings button on the right hand side
-<img src="ReadmeImages/Settings.png" width="800" />
+<img src="ReadmeImages/Settings.png" width="400" />
 
 Front-end was designed using bootstrap studio
 ## How it works
