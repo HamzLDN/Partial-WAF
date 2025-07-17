@@ -3,15 +3,50 @@ const current_ips = [];
 const socket = io();
 document.getElementById('filter-input').addEventListener('input', renderFilteredTable);
 
-function escapeHTML(str) {
-  if (!str) return '';
-  return str.replace(/[&<>"']/g, s => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;'
-  })[s]);
+// function escapeHTML(str) {
+//   if (!str) return '';
+//   return str.replace(/[&<>"']/g, s => ({
+//     '&': '&amp;',
+//     '<': '&lt;',
+//     '>': '&gt;',
+//     '"': '&quot;',
+//     "'": '&#39;'
+//   })[s]);
+// }
+
+function row(tr, bgcolour) {
+  tr.role = "row";
+  tr.className = "odd";
+  tr.style.backgroundColor = bgcolour;
+}
+
+function insert_data(tr, section, data) {
+  section.textContent = data;
+  tr.appendChild(section);
+}
+function createbtn(tr, data) {
+  const buttonCell = document.createElement("td");
+  const buttonWrapper = document.createElement("div");
+  buttonWrapper.style.padding = "20px";
+  const btn = document.createElement("button");
+  btn.textContent = "Click to view";
+  btn.addEventListener("click", () => overlay_on(data));
+  buttonWrapper.appendChild(btn);
+  buttonCell.appendChild(buttonWrapper);
+  tr.appendChild(buttonCell);
+}
+function iconbtn() {
+  return (iconClass, className, attrs = {}) => {
+    const a = document.createElement("a");
+    a.href = "#";
+    a.className = className;
+    a.setAttribute("role", "button");
+    Object.entries(attrs).forEach(([k, v]) => a.setAttribute(k, v));
+    const icon = document.createElement("i");
+    icon.className = iconClass;
+    a.appendChild(icon);
+    return a;
+  };
 }
 
 function renderFilteredTable() {
@@ -44,28 +79,48 @@ function renderFilteredTable() {
           bgcolour='red'
         }
         if (match) {
-          const parsed = JSON.parse(req.Header[i]);
+          let parsed;
+          try {
+            parsed = JSON.parse(req.Header[i]);
+          } catch (err) {
+            parsed = { error: "Invalid JSON" };
+          }
+          
           const data = JSON.stringify(parsed, null, 4);
-          const row = `
-          <tr role="row" class="odd" style="background-color: ${escapeHTML(bgcolour)}">
-            <td>${escapeHTML(ip)}</td>
-            <td>${escapeHTML(req.Method[i])}</td>
-            <td>${escapeHTML(req.Url[i])}</td>
-            <td>
-              <div style="padding:20px">
-                <button id="btn-${i}">Click to view</button>
-              </div>
-            </td>
-            <td>${req.ContainsXSS[i]}</td>
-            <td class="text-center align-middle" style="max-height: 60px;height: 60px;">
-              <a class="btn btnMaterial btn-flat primary semicircle" role="button" href="#"><i class="far fa-eye"></i></a>
-              <a class="btn btnMaterial btn-flat success semicircle" role="button" href="#"><i class="fas fa-pen"></i></a>
-              <a class="btn btnMaterial btn-flat accent btnNoBorders checkboxHover" role="button" style="margin-left: 5px; color: #DC3545;" data-bs-toggle="modal" data-bs-target="#delete-modal" href="#"><i class="fas fa-trash btnNoBorders"></i></a>
-            </td>
-          </tr>
-        `;
-        tbody.insertAdjacentHTML('afterbegin', row);
-        document.getElementById(`btn-${i}`).addEventListener('click', () => overlay_on(data));
+          const tr = document.createElement("tr");
+          row(tr, bgcolour)
+
+          insert_data(tr, document.createElement("td"), ip) //ip
+
+          insert_data(tr, document.createElement("td"), req.Method[i]) //method
+      
+          insert_data(tr, document.createElement("td"), req.Url[i]) // url
+
+          createbtn(tr, data)
+
+          const xssCell = document.createElement("td");
+          xssCell.id = "xss";
+          xssCell.textContent = req.ContainsXSS[i];
+          tr.appendChild(xssCell);
+          
+          const actionsCell = document.createElement("td");
+          actionsCell.className = "text-center align-middle";
+          actionsCell.style.maxHeight = "60px";
+          actionsCell.style.height = "60px";
+          
+          const makeIconButton = iconbtn()
+          actionsCell.appendChild(makeIconButton("far fa-eye", "btn btnMaterial btn-flat primary semicircle"));
+          actionsCell.appendChild(makeIconButton("fas fa-pen", "btn btnMaterial btn-flat success semicircle"));
+          actionsCell.appendChild(makeIconButton("fas fa-trash btnNoBorders", "btn btnMaterial btn-flat accent btnNoBorders checkboxHover", {
+            "data-bs-toggle": "modal",
+            "data-bs-target": "#delete-modal",
+            "style": "margin-left: 5px; color: #DC3545;"
+          }));
+          
+          tr.appendChild(actionsCell);
+
+          tbody.prepend(tr);
+          
         }
       }
       current_ips.push(ip);
@@ -79,7 +134,7 @@ socket.on('network', (data) => {
 
 function overlay_off() {
   document.getElementById("overlay").style.display = "none";
-  document.getElementById("text").textContent = "";  // ⬅ Clear the text
+  document.getElementById("text").textContent = "";  //  Clear the text
 }
 
 function overlay_on(headerData) {
