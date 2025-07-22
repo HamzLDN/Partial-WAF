@@ -27,7 +27,7 @@ const information = settings.info
 
 function Partial_MiddleWare(req, res, next) {
 
-    if (information.settings['csrf_protection'] === 1) csrf.csrf_layer(req, res)
+    if (information.settings['csrf_protection'] === 1) csrf.handle_csrf_layer(req, res)
     if (information.settings['freeze_site'] === 1) {
       return res.status(503).send("SERVER IS TEMPORARILY DOWN")
     }
