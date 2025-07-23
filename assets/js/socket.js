@@ -3,17 +3,6 @@ const current_ips = [];
 const socket = io();
 document.getElementById('filter-input').addEventListener('input', renderFilteredTable);
 
-// function escapeHTML(str) {
-//   if (!str) return '';
-//   return str.replace(/[&<>"']/g, s => ({
-//     '&': '&amp;',
-//     '<': '&lt;',
-//     '>': '&gt;',
-//     '"': '&quot;',
-//     "'": '&#39;'
-//   })[s]);
-// }
-
 function row(tr, bgcolour) {
   tr.role = "row";
   tr.className = "odd";
