@@ -42,7 +42,6 @@ Now, on your express project, add the 2 following lines to deploy
   app.use(partial_middleware)
 ```
 
-Default port should be `278` to acccess on localhost
 ## Acknowledgements
 
  - [Bootstrap Studios for front-end](https://bootstrapstudio.io)
