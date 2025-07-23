@@ -5,11 +5,11 @@ const router = express.Router()
 
 router.post("/whitelist-ip", (req, res) => {
     const {filtered_ip} = req.body;
-    if (req.information['whitelist-ip'].some(x=>filtered_ip===x)) {
+    if (information.whitelist_ip.some(x=>filtered_ip===x)) {
       return res.status(200).send("IP ALREADY WHITELISTED")
     }
     else {
-      information['whitelist-ip'].push(filtered_ip) 
+      information.whitelist_ip.push(filtered_ip) 
       return res.status(200).send("IP WHITELISTED SUCCESSFULLY")
     }
   })
@@ -17,11 +17,11 @@ router.post("/whitelist-ip", (req, res) => {
 router.post("/blacklist-ip", (req, res) => {
   
     const {filtered_ip} = req.body;
-    if (information['blacklist-ip'].some(x=>filtered_ip===x)) {
+    if (information.blacklist_ip.some(x=>filtered_ip===x)) {
         return res.status(200).send("IP ALREADY BLACKLISTED")
     }
     else {
-        information['blacklist-ip'].push(filtered_ip) 
+        information.blacklist_ip.push(filtered_ip) 
         return res.status(200).send("IP BLACKLISTED SUCCESSFULLY")
     }
   }

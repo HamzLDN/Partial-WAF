@@ -1,5 +1,5 @@
 {
-  "name": "partial-protect",
+  "name": "partial-waf",
   "version": "1.0.0",
   "description": "Partial-Protect express view http traffic on website",
   "keywords": [
@@ -10,13 +10,13 @@
     "security",
     "analysis"
   ],
-  "homepage": "https://github.com/HamzLDN/Partial-Protect#readme",
+  "homepage": "https://github.com/HamzLDN/partial-waf#readme",
   "bugs": {
     "url": "https://github.com/HamzLDN/Partial-Protect/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HamzLDN/Partial-Protect.git"
+    "url": "git+https://github.com/HamzLDN/partial-waf.git"
   },
   "license": "ISC",
   "author": "HamzLDN",
