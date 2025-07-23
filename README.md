@@ -4,11 +4,12 @@
 Partial-WAF aims to heavily focus on detecting threats in real time and defending against it. Aimed to be user friendly for small sites trying to have extra security.
 
 ## Visuals
-[<img src="ReadmeImages/Dashboard.png" width="800" />](ReadmeImages/Dashboard.png)
+```http://localhost:278```
+[Click here to view the dashboard image](ReadmeImages/Dashboard.png)
 
 ## Settings option
-To view the image just click on the settings button on the right hand side  
-[<img src="ReadmeImages/Settings.png" width="800" />](ReadmeImages/Settings.png)
+- To view the image just click on the settings button on the right hand side  
+- [Click here to view the settings image](ReadmeImages/Settings.png)
 
 
 Front-end was designed using bootstrap studio
