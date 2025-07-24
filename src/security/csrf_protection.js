@@ -1,5 +1,6 @@
-const utility = require("../utils/TokenUtils")
 
+const { info } = require("../logdata/information");
+const utility = require("../utils/TokenUtils")
 function render_csrf(html) {
     const find_forms = find_multiple_index(html, "<form");
     if (find_forms.length === 0) {
@@ -48,14 +49,14 @@ function insert_csrf(html, form_start) {
 }
 
 function handle_csrf_layer(req, res, information) {
+    if (information.settings.csrf_protection===undefined) return false;
     const originalSend = res.send;
     res.send = function (body) {
-      if (typeof body === 'string' && body.includes('<html')) {
+      if (typeof body === 'string' && body.includes('<form')) {
         const params = render_csrf(body)
         body = params[0]
-  
         if (params[1] !== -1) {
-          information['csrf'].push({IP : req.ip, CSRF_TOKEN: params[1]['token'], EXPR: params[1]['expiration']})
+          information.csrf.push({IP : req.ip, CSRF_TOKEN: params[1].token, EXPR: params[1].expiration})
         }
       }
       return originalSend.call(this, body);
@@ -86,7 +87,6 @@ function validate_csrf(req, res, information) {
         const is_valid = information['csrf'].some(x=>x['IP'] === req.ip && x['CSRF_TOKEN'] === req.body['csrf'] && utility.check_expiration(x['EXPR']))
         
         if (!is_valid) {
-        console.log("CSRF_ID INCORRECT")
         return 401
         }
     } catch (err){
@@ -96,9 +96,6 @@ function validate_csrf(req, res, information) {
 }
 
 
-
-function purge_csrf() {
-}
 module.exports = {
     render_csrf, 
     handle_csrf_layer,

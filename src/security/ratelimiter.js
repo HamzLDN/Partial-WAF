@@ -29,13 +29,13 @@ function handle_ips(ip, ip_exist, rate_limit, timeout) {
 
 
 function exceeded_rpm(ip, rate_limit, timeout) { // false means didnt exceed limit
-    if ((rate_limit && timeout)===undefined) return false
+    if (Number.isNaN(rate_limit || timeout)) return false
     const ip_exist = blocked_ips.find(entry => Object.keys(entry)[0] === ip);
     if (!ip_exist) {
         const request = { };
-        request['Timestamp'] = utility.generate_time(1)
-        request['Counter'] = 0
-        request['Blocked'] = false
+        request.Timestamp = utility.generate_time(1)
+        request.Counter = 0
+        request.Blocked = false
         blocked_ips.push({ [ip]: [request]});
     } else {
         check_blocked_ip(ip_exist[ip])
