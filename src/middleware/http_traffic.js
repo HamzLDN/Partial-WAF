@@ -18,10 +18,11 @@ app.use(express.json());
 
 const { Server } = require('socket.io');
 const server = http.createServer(app);
-
 app.use(express.urlencoded({ extended: true }));
+
 app.use("/permissions", permissions)
 app.use("/settings", userSettings)
+
 
 const io = new Server(server); 
 const information = settings.info
@@ -37,7 +38,7 @@ function Partial_MiddleWare(req, res, next) {
     parseInt(information.settings.timeout))) {
     return res.status(403).send("IP IS TEMPORARILY BLOCKED")
   }
-
+  
   csrf.handle_csrf_layer(req, res, information);
   
   if (information.blacklist_ip.some(x => x===req.ip))  {
@@ -56,7 +57,7 @@ function Partial_MiddleWare(req, res, next) {
       JSON.stringify(req.headers), 
       JSON.stringify(req.body)]
     );
-    
+
   http_log.log_data(
     req.ip,
     req.method, 
