@@ -1,7 +1,7 @@
 
 # Partial-WAF
 
-Partial (WAF) aims to heavily focus on detecting threats in real time and defending against it. Aimed to be user friendly for small sites trying to have extra security.
+Partial (WAF) aims to heavily focus on detecting threats in real time and defending against it. Aimed to be user friendly and anyone can use it!
 
 ## Visuals
 ```http://localhost:278```
