@@ -1,5 +1,3 @@
-
-const { info } = require("../logdata/information");
 const utility = require("../utils/TokenUtils")
 function render_csrf(html) {
     const find_forms = find_multiple_index(html, "<form");
@@ -50,6 +48,8 @@ function insert_csrf(html, form_start) {
 
 function handle_csrf_layer(req, res, information) {
     if (information.settings.csrf_protection===undefined) return false;
+    if (req.method !== 'GET') return validate_csrf(req, res, information);
+    
     const originalSend = res.send;
     res.send = function (body) {
       if (typeof body === 'string' && body.includes('<form')) {
@@ -84,14 +84,15 @@ function find_multiple_index(html, string) {
 
 function validate_csrf(req, res, information) {
     try {
-        const is_valid = information['csrf'].some(x=>x['IP'] === req.ip && x['CSRF_TOKEN'] === req.body['csrf'] && utility.check_expiration(x['EXPR']))
-        
+        const is_valid = information.csrf.some(x=> 
+            x.IP === req.ip && 
+            x.CSRF_TOKEN === req.body.csrf &&
+            utility.check_expiration(x.EXPR))
         if (!is_valid) {
-        return 401
+        return res.status(403).send("CSRF TOKEN IS INVALID OR EXPIRED")
         }
     } catch (err){
-        console.log(err)
-        return 500
+        return res.status(500).send("INTERNAL SERVER ERROR")
     }
 }
 
