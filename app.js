@@ -11,12 +11,15 @@ if (!host || !port) {
     port = 3000
     console.log("USING DEFAULT HOST AND PORT");
 }
+app.use(express.urlencoded({ extended: true }));
 
 app.use(partial_middleware)
 
 // Uncomment the following lines to see an example
 app.get("/", (req, res) => {
-    res.send(`<form id="simpleForm">
+    res.send(`
+        <h1> THIS IS AN EXAMPLE FORM </h1>
+<form id="simpleForm" action="/login" method="POST">
   <label for="name">Name:</label><br />
   <input type="text" id="name" name="name" required /><br /><br />
 
@@ -24,7 +27,8 @@ app.get("/", (req, res) => {
   <input type="email" id="email" name="email" required /><br /><br />
 
   <button type="submit">Submit</button>
-</form>`);
+</form>
+`);
 });
 
 app.listen(port, host, () => {
