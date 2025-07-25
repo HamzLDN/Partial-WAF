@@ -33,12 +33,12 @@ You will have a dashboard which runs on the localhost. And you can access it on 
 In your project path, type
 
 ```bash
-  npm install github:HamzLDN/Partial-waf
+  npm install github:HamzLDN/partial-waf
 ```
 
 Now, on your express project, add the 2 following lines to deploy
 ```js
-  const partial_middleware = require('Partial-waf')
+  const partial_middleware = require('partial-waf')
   app.use(partial_middleware)
 ```
 
